@@ -17,6 +17,7 @@ $msg_class = "";
             $msg = "Pola wypełnione";
             $msg_class = "msg--confirmation";
             
+            // EMAIL VALIDATION
             if(filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
                 //fail
                 $msg = "Proszę poprawić email";
@@ -26,6 +27,35 @@ $msg_class = "";
                 //passed
                 $msg = "Email OK";
                 $msg_class = "msg--confirmation";
+                
+                // email variables
+                $to_email = "@gmail.com";
+                $server_email = "@dpoczta.pl";
+                $subject = "Message from contact form";
+                $body = "<h3>Message from contact form</h3>
+                <h4>Nadawca:</h4>
+                <p>" . $name . "</p>
+                <h4>Email:</h4>
+                <p>" . $email . "</p>
+                <h4>Wiadomość:</h4>
+                <p>" . $message . "</p>";
+                // email headers
+                $headers = "MIME-Version: 1.0" . "\r\n";
+                $headers .= "Content-Type:text/html;charset=UTF-8" . "\r\n";
+                $headers .= "From: " . $name . "<" . $server_email . ">" . "\r\n";
+                $headers .= "Reply-To: " . $email . "\r\n";
+
+                //jeśli są wszystkie zmienne
+                if(mail($to_email, $subject, $body, $headers)) {
+                    //email sent
+                    $msg = "Email wysłany!";
+                    $msg_class = "msg--confirmation";
+
+                } else {
+                    //some error
+                    $msg = "Błąd!!! nie wysłano wiadomości!!!";
+                    $msg_class = "msg--warning";
+                }
 
             }
 
